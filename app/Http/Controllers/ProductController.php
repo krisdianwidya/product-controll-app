@@ -17,6 +17,12 @@ class ProductController extends Controller
         return view('products.products');
     }
 
+    public function getProducts()
+    {
+        $products = Product::all();
+        return response()->json($products);
+    }
+
     public function store(Request $request)
     {
 
@@ -45,24 +51,5 @@ class ProductController extends Controller
         } else {
             return response()->json($this->errors());
         }
-
-
-        // if ($request->hasFile('image')) {
-
-        //     foreach ($request->image as $img_product) {
-        //         $fileName = time() . '.' . $img_product->getClientOriginalName();
-        //         $img_product->storeAs('assets/uploads', $fileName, 'public');
-        //         $arr_img[] = $fileName;
-        //     }
-
-        //     auth()->user()->products()->create([
-        //         'title' => $request->title,
-        //         'description' => $request->description,
-        //         'price' => $request->price,
-        //         'image' => json_encode($arr_img)
-        //     ])->categories()->attach($request->categories);
-        // }
-
-        // return redirect(route('home'))->with('message', 'Stuff added succesfully');
     }
 }

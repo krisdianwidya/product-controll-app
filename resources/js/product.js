@@ -1,4 +1,32 @@
-$('#products').DataTable();
+getProducts();
+
+function getProducts() {
+    $.get('/getproducts')
+        .done(data => {
+            $('#products').DataTable({
+                destroy: true,
+                data: data,
+                columns: [
+                    {
+                        data: 'image',
+                        render: function (data) {
+                            return `<img src="/storage/assets/uploads/${data}" class="img-fluid" style="max-width: 200px; max-height: 200px; object-fit: scale-down;" alt="...">`
+                        },
+                        orderable: false
+                    },
+                    { data: 'name' },
+                    { data: 'price' },
+                    { data: 'description' },
+                    {
+                        render: () => {
+                            return `<button class="btn btn-primary" id="btn-update"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" id="btn-delete"><i class="fas fa-trash"></i></button>`
+                        }
+                    }
+                ]
+            });
+        });
+}
 
 $('#btn-add').on('click', e => {
     e.preventDefault();

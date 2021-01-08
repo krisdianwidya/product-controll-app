@@ -21,3 +21,4 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'loadView'])->name('products_view');
 
 Route::post('/products', [ProductController::class, 'store']);
+Route::get('/getproducts', [ProductController::class, 'getProducts']);
