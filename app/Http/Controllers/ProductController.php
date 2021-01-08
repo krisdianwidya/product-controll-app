@@ -63,6 +63,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        $validateImg = false;
         if ($request->hasFile('image')) {
             $validateImg = $this->validate($request, [
                 'image' => 'required|file|mimes:jpg,jpeg,bmp,png|max:10240|dimensions:max_height=4000,max_width=4000'

@@ -29,8 +29,13 @@ function getProducts() {
         });
 }
 
+let field = ['name', 'price', 'description', 'image'];
+
+// add data product
 $('#btn-add').on('click', e => {
     e.preventDefault();
+
+    resetError();
 
     Swal.showLoading()
 
@@ -53,7 +58,7 @@ $('#btn-add').on('click', e => {
         .done(() => {
             Swal.hideLoading()
 
-            // $('#add-product-modal').modal('hide');
+            $('#add-product-modal').removeClass('show');
 
             Swal.fire(
                 'Success',
@@ -61,30 +66,61 @@ $('#btn-add').on('click', e => {
                 'success'
             )
 
+            $('.modal-backdrop').removeClass('show');
+
             getProducts();
         })
         .fail((error) => {
             Swal.hideLoading()
-            if (error) {
-                $('#name').addClass('is-invalid');
-                $('#name-error')
-                    .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.name[0]}</p>`);
 
-                $('#price').addClass('is-invalid');
-                $('#price-error')
-                    .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.price[0]}</p>`);
-
-                $('#description').addClass('is-invalid');
-                $('#description-error')
-                    .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.description[0]}</p>`);
-
-                $('#image').addClass('is-invalid');
-                $('#image-error')
-                    .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.image[0]}</p>`);
-            }
+            displayError(error);
         });
 });
 
+function displayError(error) {
+    if (error) {
+
+        if (error.responseJSON.errors.name) {
+            $('#name').addClass('is-invalid');
+            $('#name-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.name[0]}</p>`);
+        }
+
+        if (error.responseJSON.errors.price) {
+            $('#price').addClass('is-invalid');
+            $('#price-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.price[0]}</p>`);
+        }
+
+        if (error.responseJSON.errors.description) {
+            $('#description').addClass('is-invalid');
+            $('#description-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.description[0]}</p>`);
+        }
+
+        if (error.responseJSON.errors.image) {
+            $('#image').addClass('is-invalid');
+            $('#image-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.image[0]}</p>`);
+        }
+    }
+}
+
+
+function resetError() {
+    for (let i = 0; i < field.length; i++) {
+        console.log(field[i]);
+
+        if ($(`#${field[i]}`).hasClass('is-invalid')) {
+            $(`#${field[i]}`).removeClass('is-invalid');
+            $(`#${field[i]}-error`)
+                .html(``);
+        }
+    }
+}
+// end add data product
+
+// update data product
 $(document).on('click', e => {
     if (e.target.classList.contains('btn-edit')) {
         const productId = e.target.dataset.id;
@@ -99,6 +135,8 @@ $(document).on('click', e => {
         // update data product
         $('#btn-update').on('click', e => {
             e.preventDefault();
+
+            resetErrorUpdate();
 
             Swal.showLoading()
 
@@ -123,40 +161,70 @@ $(document).on('click', e => {
 
                     Swal.hideLoading()
 
-                    // $('#add-product-modal').modal('hide');
+                    $('#update-product-modal').removeClass('show');
 
                     Swal.fire(
                         'Success',
                         'Product has been updated.',
                         'success'
                     )
+
+                    $('.modal-backdrop').removeClass('show');
+
                     getProducts();
                 })
                 .fail((error) => {
                     Swal.hideLoading()
-                    console.log(error);
-                    // if (error) {
-                    //     $('#update-name').addClass('is-invalid');
-                    //     $('#name-error')
-                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.name[0]}</p>`);
 
-                    //     $('#update-price').addClass('is-invalid');
-                    //     $('#price-error')
-                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.price[0]}</p>`);
-
-                    //     $('#update-description').addClass('is-invalid');
-                    //     $('#description-error')
-                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.description[0]}</p>`);
-
-                    //     $('#update-image').addClass('is-invalid');
-                    //     $('#image-error')
-                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.image[0]}</p>`);
-                    // }
+                    displayErrorUpdate(error);
                 });
         });
     }
 });
 
+function displayErrorUpdate(error) {
+    if (error) {
+        if (error.responseJSON.errors.name) {
+            $('#update-name').addClass('is-invalid');
+            $('#update-name-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.name[0]}</p>`);
+        }
+
+        if (error.responseJSON.errors.price) {
+            $('#update-price').addClass('is-invalid');
+            $('#update-price-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.price[0]}</p>`);
+        }
+
+        if (error.responseJSON.errors.description) {
+            $('#update-description').addClass('is-invalid');
+            $('#update-description-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.description[0]}</p>`);
+        }
+
+        if (error.responseJSON.errors.image) {
+            $('#update-image').addClass('is-invalid');
+            $('#update-image-error')
+                .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.image[0]}</p>`);
+        }
+    }
+}
+
+function resetErrorUpdate() {
+    for (let i = 0; i < field.length; i++) {
+        console.log(field[i]);
+
+        if ($(`#update-${field[i]}`).hasClass('is-invalid')) {
+            $(`#update-${field[i]}`).removeClass('is-invalid');
+            $(`#update-${field[i]}-error`)
+                .html(``);
+        }
+    }
+}
+//end update data product
+
+
+//delete data product
 $(document).on('click', e => {
     if (e.target.classList.contains('btn-del')) {
         const productId = e.target.dataset.id;
@@ -184,8 +252,6 @@ $(document).on('click', e => {
 
                         Swal.hideLoading()
 
-                        // $('#add-product-modal').modal('hide');
-
                         Swal.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -198,9 +264,8 @@ $(document).on('click', e => {
                         Swal.hideLoading()
                         console.log(error);
                     });
-
-
             }
         })
     }
 });
+// end delete data product

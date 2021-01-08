@@ -74,7 +74,7 @@
 
     <!-- Modal update product -->
     <div class="modal fade " id="update-product-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered mo//delete data productdal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Product</h5>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" class="form-control mb-2" id="update-name" placeholder="Product name">
-                    <div id="name-error">
+                    <div id="update-name-error">
 
                     </div>
 
@@ -94,19 +94,19 @@
                         </div>
                         <input type="number" class="form-control" id="update-price" placeholder="Product price">
                     </div>
-                    <div id="price-error">
+                    <div id="update-price-error">
 
                     </div>
 
                     <textarea class="form-control mb-2" name="description" id="update-description" rows="3" placeholder="Product Description"></textarea>
-                    <div id="description-error">
+                    <div id="update-description-error">
 
                     </div>
 
                     <div>
                         <label for="image">Product image</label>
                         <input class="form-control-file" id="update-image" type="file">
-                        <div id="image-error">
+                        <div id="update-image-error">
 
                         </div>
                     </div>
