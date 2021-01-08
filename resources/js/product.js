@@ -3,7 +3,7 @@ $('#products').DataTable();
 $('#btn-add').on('click', e => {
     e.preventDefault();
 
-    // Swal.showLoading()
+    Swal.showLoading()
 
     let productData = new FormData();
     productData.append('name', $('#name').val());
@@ -22,6 +22,9 @@ $('#btn-add').on('click', e => {
         processData: false
     })
         .done((data) => {
+            Swal.hideLoading()
+
+            $('#add-product-modal').modal('hide');
 
             Swal.fire(
                 'Success',
@@ -29,9 +32,9 @@ $('#btn-add').on('click', e => {
                 'success'
             )
             console.log(data);
-
         })
         .fail((error) => {
+            Swal.hideLoading()
             if (error) {
                 $('#name').addClass('is-invalid');
                 $('#name-error')
@@ -49,9 +52,5 @@ $('#btn-add').on('click', e => {
                 $('#image-error')
                     .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.image[0]}</p>`);
             }
-        })
-        .always(() => {
-            // $('#comment').val('');
-            // Swal.hideLoading()
         });
 });
