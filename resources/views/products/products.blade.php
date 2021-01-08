@@ -8,7 +8,7 @@
 
     <button class="btn btn-primary mb-1" data-toggle="modal" data-target="#add-product-modal">+ Add Product</button>
 
-    <table id="example" class="display" style="width:100%">
+    <table id="products" class="display" style="width:100%">
         <thead>
             <tr>
                 <th></th>
@@ -34,20 +34,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" class="form-control mb-2" placeholder="Product name">
-                    <input type="number" class="form-control mb-2" placeholder="Product price">
+                    <input type="text" class="form-control mb-2" id="name" placeholder="Product name">
+                    <div id="name-error">
+
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="number" class="form-control" id="price" placeholder="Product price">
+                    </div>
+                    <div id="price-error">
+
+                    </div>
+
                     <textarea class="form-control mb-2" name="description" id="description" rows="3" placeholder="Product Description"></textarea>
+                    <div id="description-error">
+
+                    </div>
 
                     <div>
                         <label for="image">Product image</label>
-                        <input class="form-control-file" type="file">
+                        <input class="form-control-file" id="image" type="file">
+                        <div id="image-error">
+
+                        </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                    <button type="button" class="btn btn-primary" id="btn-update">Save</button>
+                    <button type="button" class="btn btn-primary" id="btn-add">Save</button>
                 </div>
             </div>
         </div>
