@@ -83,7 +83,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" class="form-control mb-2" id="name" placeholder="Product name">
+                    <input type="text" class="form-control mb-2" id="update-name" placeholder="Product name">
                     <div id="name-error">
 
                     </div>
@@ -92,20 +92,20 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Rp</span>
                         </div>
-                        <input type="number" class="form-control" id="price" placeholder="Product price">
+                        <input type="number" class="form-control" id="update-price" placeholder="Product price">
                     </div>
                     <div id="price-error">
 
                     </div>
 
-                    <textarea class="form-control mb-2" name="description" id="description" rows="3" placeholder="Product Description"></textarea>
+                    <textarea class="form-control mb-2" name="description" id="update-description" rows="3" placeholder="Product Description"></textarea>
                     <div id="description-error">
 
                     </div>
 
                     <div>
                         <label for="image">Product image</label>
-                        <input class="form-control-file" id="image" type="file">
+                        <input class="form-control-file" id="update-image" type="file">
                         <div id="image-error">
 
                         </div>
@@ -115,11 +115,11 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                    <button type="button" class="btn btn-primary" id="btn-add">Update</button>
+                    <button type="button" class="btn btn-primary" id="btn-update">Update</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End modal add product -->
+    <!-- End modal update product -->
 </div>
 @endsection

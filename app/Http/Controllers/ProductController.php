@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -21,6 +24,11 @@ class ProductController extends Controller
     {
         $products = Product::all();
         return response()->json($products);
+    }
+
+    public function getProduct(Product $product)
+    {
+        return response()->json($product);
     }
 
     public function store(Request $request)
@@ -48,6 +56,48 @@ class ProductController extends Controller
 
                 return response()->json('ok');
             }
+        } else {
+            return response()->json($this->errors());
+        }
+    }
+
+    public function update(Request $request, Product $product)
+    {
+        if ($request->hasFile('image')) {
+            $validateImg = $this->validate($request, [
+                'image' => 'required|file|mimes:jpg,jpeg,bmp,png|max:10240|dimensions:max_height=4000,max_width=4000'
+            ]);
+        }
+
+        $validate = $this->validate($request, [
+            'name' => 'required|min:5',
+            'price' => 'required|min:4|numeric',
+            'description' => 'required|min:10',
+        ]);
+
+        if ($validate) {
+
+            $imgProduct = $product->image;
+
+            if ($validateImg) {
+
+                if (Storage::exists('public/assets/uploads/' . $product->image)) {
+                    Storage::delete('public/assets/uploads/' . $product->image);
+                }
+
+                $fileName = time() . '.' . $request->image->getClientOriginalName();
+                $request->image->storeAs('assets/uploads', $fileName, 'public');
+
+                $imgProduct = $fileName;
+            }
+            $product->update([
+                'name' => $request->name,
+                'price' => $request->price,
+                'description' => $request->description,
+                'image' => $imgProduct
+            ]);
+
+            return response()->json('ok');
         } else {
             return response()->json($this->errors());
         }

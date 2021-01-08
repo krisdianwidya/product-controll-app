@@ -10,7 +10,7 @@ function getProducts() {
                     {
                         data: 'image',
                         render: function (data) {
-                            return `<img src="/storage/assets/uploads/${data}" class="img-fluid" style="max-width: 200px; max-height: 200px; object-fit: scale-down;" alt="...">`
+                            return `<img src="/storage/assets/uploads/${data}" class="img-fluid" alt="...">`
                         },
                         orderable: false
                     },
@@ -18,9 +18,10 @@ function getProducts() {
                     { data: 'price' },
                     { data: 'description' },
                     {
-                        render: () => {
-                            return `<button class="btn btn-primary" id="btn-update"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-danger" id="btn-delete"><i class="fas fa-trash"></i></button>`
+                        data: 'id',
+                        render: (data) => {
+                            return `<button class="btn btn-primary btn-edit" data-id="${data}" data-toggle="modal" data-target="#update-product-modal">Edit</button>
+                            <button class="btn btn-danger" id="btn-delete">Delete</button>`
                         }
                     }
                 ]
@@ -49,17 +50,18 @@ $('#btn-add').on('click', e => {
         contentType: false,
         processData: false
     })
-        .done((data) => {
+        .done(() => {
             Swal.hideLoading()
 
-            $('#add-product-modal').modal('hide');
+            // $('#add-product-modal').modal('hide');
 
             Swal.fire(
                 'Success',
                 'Product has been inserted.',
                 'success'
             )
-            console.log(data);
+
+            getProducts();
         })
         .fail((error) => {
             Swal.hideLoading()
@@ -81,4 +83,76 @@ $('#btn-add').on('click', e => {
                     .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.image[0]}</p>`);
             }
         });
+});
+
+$(document).on('click', e => {
+    if (e.target.classList.contains('btn-edit')) {
+        const productId = e.target.dataset.id;
+
+        $.get(`/product/${productId}`)
+            .done(data => {
+                $('#update-name').val(data.name);
+                $('#update-price').val(data.price);
+                $('#update-description').val(data.description);
+            });
+
+        // update data product
+        $('#btn-update').on('click', e => {
+            e.preventDefault();
+
+            Swal.showLoading()
+
+            let productUpdateData = new FormData();
+            productUpdateData.append('name', $('#update-name').val());
+            productUpdateData.append('price', $('#update-price').val());
+            productUpdateData.append('description', $('#update-description').val());
+            productUpdateData.append('image', $("#update-image")[0].files[0]);
+
+            $.ajax({
+                url: `/product/${productId}`,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: "post",
+                data: productUpdateData,
+                contentType: false,
+                processData: false
+            })
+                .done((data) => {
+                    console.log(data);
+
+                    Swal.hideLoading()
+
+                    // $('#add-product-modal').modal('hide');
+
+                    Swal.fire(
+                        'Success',
+                        'Product has been updated.',
+                        'success'
+                    )
+                    getProducts();
+                })
+                .fail((error) => {
+                    Swal.hideLoading()
+                    console.log(error);
+                    // if (error) {
+                    //     $('#update-name').addClass('is-invalid');
+                    //     $('#name-error')
+                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.name[0]}</p>`);
+
+                    //     $('#update-price').addClass('is-invalid');
+                    //     $('#price-error')
+                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.price[0]}</p>`);
+
+                    //     $('#update-description').addClass('is-invalid');
+                    //     $('#description-error')
+                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.description[0]}</p>`);
+
+                    //     $('#update-image').addClass('is-invalid');
+                    //     $('#image-error')
+                    //         .append(`<p class='m-0 text-danger'>${error.responseJSON.errors.image[0]}</p>`);
+                    // }
+                });
+        });
+    }
 });
