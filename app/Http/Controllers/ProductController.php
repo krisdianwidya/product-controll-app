@@ -102,4 +102,15 @@ class ProductController extends Controller
             return response()->json($this->errors());
         }
     }
+
+    public function destroy(Product $product)
+    {
+        if (Storage::exists('public/assets/uploads/' . $product->image)) {
+            Storage::delete('public/assets/uploads/' . $product->image);
+        }
+
+        $product->delete();
+
+        return response()->json('ok');
+    }
 }

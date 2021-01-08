@@ -21,7 +21,7 @@ function getProducts() {
                         data: 'id',
                         render: (data) => {
                             return `<button class="btn btn-primary btn-edit" data-id="${data}" data-toggle="modal" data-target="#update-product-modal">Edit</button>
-                            <button class="btn btn-danger" id="btn-delete">Delete</button>`
+                            <button class="btn btn-danger btn-del" data-id="${data}">Delete</button>`
                         }
                     }
                 ]
@@ -154,5 +154,53 @@ $(document).on('click', e => {
                     // }
                 });
         });
+    }
+});
+
+$(document).on('click', e => {
+    if (e.target.classList.contains('btn-del')) {
+        const productId = e.target.dataset.id;
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: `/product/${productId}`,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: "delete"
+                })
+                    .done((data) => {
+                        console.log(data);
+
+                        Swal.hideLoading()
+
+                        // $('#add-product-modal').modal('hide');
+
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+
+                        getProducts();
+                    })
+                    .fail((error) => {
+                        Swal.hideLoading()
+                        console.log(error);
+                    });
+
+
+            }
+        })
     }
 });
