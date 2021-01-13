@@ -15,7 +15,12 @@ function getProducts() {
                         orderable: false
                     },
                     { data: 'name' },
-                    { data: 'price' },
+                    {
+                        data: 'price',
+                        render: data => {
+                            return new Intl.NumberFormat('IN', { style: 'currency', currency: 'IDR' }).format(data)
+                        }
+                    },
                     { data: 'description' },
                     {
                         data: 'id',
@@ -58,7 +63,7 @@ $('#btn-add').on('click', e => {
         .done(() => {
             Swal.hideLoading()
 
-            $('#add-product-modal').removeClass('show');
+            $('#update-product-modal').removeClass('show').css({ display: "none" });
 
             Swal.fire(
                 'Success',
@@ -66,7 +71,8 @@ $('#btn-add').on('click', e => {
                 'success'
             )
 
-            $('.modal-backdrop').removeClass('show');
+            $('.modal-backdrop').remove();
+            $('body').css({ paddingRight: "0" }).removeClass('modal-open');
 
             getProducts();
         })
@@ -161,7 +167,7 @@ $(document).on('click', e => {
 
                     Swal.hideLoading()
 
-                    $('#update-product-modal').removeClass('show');
+                    $('#update-product-modal').removeClass('show').css({ display: "none" });
 
                     Swal.fire(
                         'Success',
@@ -169,7 +175,8 @@ $(document).on('click', e => {
                         'success'
                     )
 
-                    $('.modal-backdrop').removeClass('show');
+                    $('.modal-backdrop').remove();
+                    $('body').css({ paddingRight: "0" }).removeClass('modal-open');
 
                     getProducts();
                 })
